@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import usersRouter from './api/users';
 import peopleRouter from './api/people';
+import reviewsRouter from './api/reviews';
 import './db';
 import defaultErrHandler from './errHandler';
 import moviesRouter from './api/movies';   //import movies router
@@ -30,6 +31,7 @@ app.use(passport.initialize());
 
 app.use('/api/movies', moviesRouter);
 
+app.use('/api/reviews', reviewsRouter);
 
 app.use('/api/people', peopleRouter);
 

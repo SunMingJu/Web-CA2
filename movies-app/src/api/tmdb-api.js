@@ -62,16 +62,15 @@ export const getMovieImages = ({ queryKey }) => {
  });
 };
 
-export const getMovieReviews = (id) => {
+export const getMovieReviews = async (id) => {
   return fetch(
-    `https://api.themoviedb.org/3/movie/${id}/reviews?api_key=${process.env.REACT_APP_TMDB_KEY}`
-  )
-    .then((res) => res.json())
-    .then((json) => {
-      // console.log(json.results);
-      return json.results;
-    });
-};
+    `/api/reviews/movie/${id}/reviews`
+      ).then(res => {
+      return res.json();
+      }).catch((error) => {
+        console.log(error);
+      });
+    };
 
 export const getUpcomingMovies = () => {
   return fetch(
@@ -336,5 +335,15 @@ export const deleteFavourite = (username, movie) => {
       'Content-Type': 'application/json'
     },
     method: 'post'
+  }).then(res => res.json())
+};
+
+export const addReview = (username, movie, review) => {
+  return fetch(`/api/reviews/movie/${movie.id}/reviews/${username}`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'post',
+    body: JSON.stringify({ author: review.author, movieId: movie.id, content: review.content, rating: review.rating })
   }).then(res => res.json())
 };
