@@ -289,4 +289,52 @@ export const getPersonCombinedCredit = (args) => {
       }).catch((error) => {
         console.log(error);
       });
-    };
+};
+
+export const login = (username, password) => {
+  return fetch('/api/users', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'post',
+      body: JSON.stringify({ username: username, password: password })
+  }).then(res => res.json())
+};
+
+export const signup = (username, password) => {
+  return fetch('/api/users?action=register', {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      method: 'post',
+      body: JSON.stringify({ username: username, password: password })
+  }).then(res => res.json())
+};
+
+export const addFavourite = (username, id) => {
+  return fetch(`/api/users/${username}/favourites`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'post',
+    body: JSON.stringify({ id })
+  }).then(res => res.json())
+};
+
+export const getFavourites = async (username) => {
+  return fetch(`/api/users/${username}/favourites`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'get'
+  }).then(res => res.json())
+};
+
+export const deleteFavourite = (username, movie) => {
+  return fetch(`/api/users/${username}/movie/${movie.id}/favourites`, {
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    method: 'post'
+  }).then(res => res.json())
+};

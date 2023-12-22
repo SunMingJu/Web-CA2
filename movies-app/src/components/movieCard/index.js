@@ -1,4 +1,6 @@
 import React, { useContext  } from "react";
+import { MoviesContext } from "../../contexts/moviesContext";
+import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -9,36 +11,27 @@ import Typography from "@mui/material/Typography";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import CalendarIcon from "@mui/icons-material/CalendarTodayTwoTone";
 import StarRateIcon from "@mui/icons-material/StarRate";
-import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
-import IconButton from "@mui/material/IconButton";
+// import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
 import img from '../../images/film-poster-placeholder.png'
-import { Link } from "react-router-dom";
 import Avatar from '@mui/material/Avatar';
-import { MoviesContext } from "../../contexts/moviesContext";
+
+
 
 export default function MovieCard({ movie, action }) {
-  const { favorites, addToFavorites } = useContext(MoviesContext);
-  const { mustWatch, addToMustWatch } = useContext(MoviesContext);
-  const isMovie = Boolean(movie.title);
+  // const { favorites, addToFavorites } = useContext(MoviesContext);
+  const { favourites } = useContext(MoviesContext);
 
-  if (favorites.find((id) => id === movie.id)) {
+  if (favourites.find((id) => id === movie.id)) {
     movie.favorite = true;
   } else {
     movie.favorite = false
   }
 
-  if (mustWatch.find((id) => id === movie.id)) {
-    movie.mustWatch = true;
-  } else {
-    movie.mustWatch = false
-  }
-
-  const handleAddToFavorite = (e) => {
-    e.preventDefault();
-    addToFavorites(movie);
-  };
-
+  // const handleAddToFavorite = (e) => {
+  //   e.preventDefault();
+  //   addToFavorites(movie);
+  // };
   return (
     <Card sx={{ maxWidth: 345 }}>
       <CardHeader
@@ -47,16 +40,11 @@ export default function MovieCard({ movie, action }) {
             <Avatar sx={{ backgroundColor: 'red' }}>
               <FavoriteIcon />
             </Avatar>
-          ) : 
-            movie.mustWatch ? (
-              <Avatar sx={{ backgroundColor: 'red' }}>
-              <PlaylistAddIcon />
-            </Avatar>
-          ):null
+          ) : null
         }
         title={
           <Typography variant="h5" component="p">
-            {isMovie ? movie.title : movie.name}{" "}
+            {movie.title}{" "}
           </Typography>
         }
       />
@@ -70,13 +58,12 @@ export default function MovieCard({ movie, action }) {
       />
       <CardContent>
         <Grid container>
-          {isMovie ? <Grid item xs={6}>
+          <Grid item xs={6}>
             <Typography variant="h6" component="p">
               <CalendarIcon fontSize="small" />
               {movie.release_date}
             </Typography>
-          </Grid> :
-            null}
+          </Grid>
           <Grid item xs={6}>
             <Typography variant="h6" component="p">
               <StarRateIcon fontSize="small" />
@@ -85,16 +72,14 @@ export default function MovieCard({ movie, action }) {
           </Grid>
         </Grid>
       </CardContent>
-      
-      {isMovie ? <CardActions disableSpacing>
+      <CardActions disableSpacing>
         {action(movie)}
         <Link style={{ textDecoration:'none'}} to={`/movies/${movie.id}`}>
           <Button variant="outlined" size="medium" color="primary">
             More Info ...
           </Button>
         </Link>
-      </CardActions> :
-      null}
+      </CardActions>
     </Card>
   );
 }

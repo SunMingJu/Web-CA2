@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
@@ -11,9 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { styled } from '@mui/material/styles';
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { logout, auth } from "../../firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
-import Spinner from "../spinner";
+import { AuthContext } from "../../contexts/authContext";
 
 const Offset = styled('div')(({ theme }) => theme.mixins.toolbar);
 
@@ -21,7 +19,8 @@ const SiteHeader = ({ history }) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
-  const [user, error, isLoading, isError] = useAuthState(auth);
+  const context = useContext(AuthContext);
+  // const [user, error, isLoading, isError] = useAuthState(auth);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -50,7 +49,7 @@ const SiteHeader = ({ history }) => {
 
   const handleMenuSelect = (pageURL) => {
     if (pageURL === "/login"){
-      logout()
+      context.signout();
     }
     navigate(pageURL, { replace: true });
   };
@@ -58,13 +57,13 @@ const SiteHeader = ({ history }) => {
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  if (isLoading) {
-    return <Spinner />;
-  }
+  // if (isLoading) {
+  //   return <Spinner />;
+  // }
 
-  if (isError) {
-    return <h1>{error.message}</h1>;
-  }
+  // if (isError) {
+  //   return <h1>{error.message}</h1>;
+  // }
 
   return (
     <>
@@ -110,6 +109,23 @@ const SiteHeader = ({ history }) => {
                       {opt.label}
                     </MenuItem>
                   ))}
+                    { (context.isAuthenticated)? 
+                      <>
+                        <MenuItem 
+                        key="Log out"
+                        color="inherit" onClick={() => handleMenuSelect("/login")}
+                        >
+                          Log out
+                        </MenuItem>
+                      </>
+                      :
+                      <MenuItem 
+                      key="Log in"
+                      color="inherit" onClick={() => handleMenuSelect("/login")}
+                      >
+                        Log in
+                      </MenuItem>
+                   }
                 </Menu>
               </>
             ) : (
@@ -155,13 +171,13 @@ const SiteHeader = ({ history }) => {
                   </Menu>
                   <Button 
                     key="People"
-                    color="inherit" onClick={() => handleMenuSelect("/person")}
+                    color="inherit" onClick={() => handleMenuSelect("/person/page1")}
                     >
                       People
                   </Button>
-                  { (user)? 
+                  { (context.isAuthenticated)? 
                       <>
-                        Welcome! {user.email} 
+                        Welcome! {context.userEmail} 
                         <Button 
                         key="Log out"
                         color="inherit" onClick={() => handleMenuSelect("/login")}
