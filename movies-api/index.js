@@ -25,6 +25,8 @@ const app = express();
 
 const port = process.env.PORT;
 
+const passport = require('passport');
+
 app.use(express.json());
 
 app.use(passport.initialize());
