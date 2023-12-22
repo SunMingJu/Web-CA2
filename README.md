@@ -73,7 +73,7 @@ The application no longer uses Firebase, but utilises JWT authentication. Movie 
 
 ## Integrating with React App
 
-All [api](#api-design) are now API from movies-api and now most are with error logs.  
+All [api](#api-design) are now from movies-api and now most are with error logs.  
 + Access to the protected page will require the user to register/login first 
 + Movie favourites and reviews are only available to logged in users.   
 + Use regular expressions to restrict users from entering non-compliant passwords during registration 
