@@ -25,7 +25,12 @@ const app = express();
 
 const port = process.env.PORT;
 
+const swaggerJsDoc = require('swagger-jsdoc');
+
+const swaggerUi = require('swagger-ui-express');
+
 const passport = require('passport');
+
 
 app.use(express.json());
 
@@ -40,6 +45,31 @@ app.use('/api/people', peopleRouter);
 app.use('/api/users', usersRouter);
 
 app.use(errHandler);
+
+var path = require('path');
+const swaggerOpt = {
+    definition: {
+      openapi: '3.0.0',
+      info: {
+        title: 'Movies API',
+        version: '1.0.0',
+        description: 'Web-CA2',
+        servers: [
+          { 
+            url: 'http://localhost:8080',
+            description: 'Development server',
+          },
+        ],
+    }
+  },
+  apis:['./api/movies/index.js',
+   './api/genres/index.js',
+    './api/people/index.js',
+     './api/users/index.js',
+      './api/reviews/index.js']
+};
+const swaggerSpec = swaggerJsDoc(swaggerOpt);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 app.listen(port, () => {
   console.info(`Server running at ${port}`);
