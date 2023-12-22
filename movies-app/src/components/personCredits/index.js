@@ -11,7 +11,7 @@ import Paper from "@mui/material/Paper";
 
 const PersonCredits = ({person}) => {
   const { data , error, isLoading, isError } = useQuery(
-    ["personCredits", { id: person.id }],
+    ["personCredits", person.id ],
     getPersonCombinedCredit
   );
 
@@ -33,14 +33,6 @@ const PersonCredits = ({person}) => {
       year: credit.release_date,
     }
   }).filter((credit) => credit.title !== undefined)
-
-  const handleEnter = (e) => {
-    e.target.style.color = 'blue';
-  } 
-
-  const handleLeave = (e) => {
-    e.target.style.color = 'black';
-  } 
 
   return (
     <>
@@ -77,9 +69,7 @@ const PersonCredits = ({person}) => {
           <li key={m.id}>
             <Link to={`/movies/${m.id}`} 
               key={m.id} 
-              style={{color: "black",textDecoration: "none"}} 
-              onMouseEnter={(e)=> handleEnter(e)}
-              onMouseLeave={(e)=> handleLeave(e)}>
+              style={{color: "black", textDecoration: "none"}} >
               <Typography sx={{marginTop: "5px"}}>
                 {m.year + " " + m.title}
               </Typography>

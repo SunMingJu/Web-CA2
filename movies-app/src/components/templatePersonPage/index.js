@@ -4,13 +4,13 @@ import ImageList from "@mui/material/ImageList";
 import ImageListItem from "@mui/material/ImageListItem";
 import { getPersonImages } from "../../api/tmdb-api";
 import { useQuery } from "react-query";
-import Spinner from '../spinner';
+import Spinner from '../spinner'
 import PersonDetailInfo from "../personDetailInfo";
 
 const TemplatePersonPage = ({ person, children }) => {
 
   const { data , error, isLoading, isError } = useQuery(
-    ["images", { id: person.id }],
+    ["images", person.id ],
     getPersonImages
   );
 
@@ -21,7 +21,8 @@ const TemplatePersonPage = ({ person, children }) => {
   if (isError) {
     return <h1>{error.message}</h1>;
   }
-  const image = data.profiles[0]
+
+  const image = data.profiles[0] 
 
   return (
     <>
@@ -42,6 +43,7 @@ const TemplatePersonPage = ({ person, children }) => {
                     </ImageListItem>
             </ImageList>
           </div>
+          <PersonDetailInfo person={person} />
         </Grid>
 
         <Grid item xs={9}>

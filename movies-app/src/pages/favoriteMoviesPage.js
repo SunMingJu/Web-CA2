@@ -1,21 +1,24 @@
-import React, { useState, useContext } from "react";
+import React, { useContext } from "react";
 import PageTemplate from "../components/templateMovieListPage";
 import { MoviesContext } from "../contexts/moviesContext";
 import { useQueries } from "react-query";
 import { getMovie } from "../api/tmdb-api";
-import Spinner from "../components/spinner";
+import Spinner from '../components/spinner'
 import RemoveFromFavorites from "../components/cardIcons/removeFromFavorites";
 import WriteReview from "../components/cardIcons/writeReview";
+import { useParams } from "react-router-dom";
 
 const FavoriteMoviesPage = () => {
-  const [currentPage, setCurrentPage] = useState(1);
 
-  const { favorites: movieIds } = useContext(MoviesContext);
+  const { pagination } = useParams();
+
+  const {favorites: movieIds } = useContext(MoviesContext);
+
   // Create an array of queries and run in parallel.
   const favoriteMovieQueries = useQueries(
     movieIds.map((movieId) => {
       return {
-        queryKey: ["movie", { id: movieId }],
+        queryKey: ["movie", movieId ],
         queryFn: getMovie,
       };
     })
@@ -28,21 +31,16 @@ const FavoriteMoviesPage = () => {
   }
 
   const movies = favoriteMovieQueries.map((q) => {
-    q.data.genre_ids = q.data.genres.map((g) => g.id);
-    return q.data;
+    q.data.genre_ids = q.data.genres.map(g => g.id)
+    return q.data
   });
 
-  const handlePageChange = (event, value) => {
-    setCurrentPage(value);
-  };
+  // const toDo = () => true;
 
   return (
     <PageTemplate
       title="Favorite Movies"
       movies={movies}
-      page={currentPage}
-      totalPage={1}
-      getPage={handlePageChange}
       action={(movie) => {
         return (
           <>
@@ -51,6 +49,8 @@ const FavoriteMoviesPage = () => {
           </>
         );
       }}
+      page="/movies/favorites"
+      pagination={pagination}
     />
   );
 };

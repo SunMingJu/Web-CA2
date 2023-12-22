@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import MovieHeader from "../headerMovie";
 import Grid from "@mui/material/Grid";
 import ImageList from "@mui/material/ImageList";
@@ -8,8 +8,9 @@ import { useQuery } from "react-query";
 import Spinner from '../spinner'
 
 const TemplateMoviePage = ({ movie, children }) => {
+
   const { data , error, isLoading, isError } = useQuery(
-    ["images", { id: movie.id }],
+    ["images", movie.id ],
     getMovieImages
   );
 

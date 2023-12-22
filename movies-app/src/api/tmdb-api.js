@@ -275,4 +275,18 @@ export const getPersonCombinedCredit = (args) => {
     .catch((error) => {
       throw error
    });
-  };
+};
+  
+  export const getMovieCredits = (id) => {
+    return fetch(
+      `/api/movies/tmdb/movie/${id.queryKey[1]}/movie_credits`, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        method: 'get'
+      }).then(res => {
+        return res.json();
+      }).catch((error) => {
+        console.log(error);
+      });
+    };
